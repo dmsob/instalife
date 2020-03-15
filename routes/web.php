@@ -14,7 +14,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'PostController@index');
-
-Route::get('/user', function (){
-    return view('user');
-});
+Route::get('post/', 'PostController@index')->name('post.index');

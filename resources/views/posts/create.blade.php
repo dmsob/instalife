@@ -17,7 +17,7 @@
    <div>
        <div class="row">
         @foreach($posts as $post)
-        <div class="col-12">
+        <div class="col-10">
             <div class="card">
                 <div class="card-header">
                     <div class="avatar"></div>
@@ -37,4 +37,5 @@
     @if (!isset($_GET['search']))
     {{ $posts->links() }}
     @endif
+
 @endsection
