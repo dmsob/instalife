@@ -1,0 +1,41 @@
+body {
+    background: white;
+    width: 100%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav {
+    margin-bottom: 15px;
+}
+
+.navbar-brand {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
+}
+
+.card{
+margin-bottom: 10px;
+height: 450px;
+}
+.card-img{
+height: 250px;
+background-position: center center;
+-webkit-background-size: cover;
+background-size: cover;
+background-repeat:  no-repeat;
+}
+.name {
+display: block;
+font-size: 16px;
+font-weight: 800;
+}
+.avatar{
+width: 40px;
+height: 40px;
+border-radius: 50%;
+background: #2b2a2c url("https://pp.userapi.com/c830509/v830509419/15a81b/YG-44JDodU0.jpg");
+background-size: 100%;
+}
