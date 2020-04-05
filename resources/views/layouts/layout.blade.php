@@ -27,7 +27,7 @@
                  <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
              </li> -->
             <li class="nav-item active "> <!-- offset-3 -->
-                <a class="nav-link" href="/"> ADD... <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ route('post.create') }}"> Создать... <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0 " action="{{ route('post.index')}}">
@@ -38,11 +38,11 @@
             <!-- Authentication Links -->
             @guest
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    <a class="nav-link" href="{{ route('login') }}">{{ __('Вход') }}</a>
                 </li>
                 @if (Route::has('register'))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        <a class="nav-link" href="{{ route('register') }}">{{ __('Регистрация') }}</a>
                     </li>
                 @endif
             @else

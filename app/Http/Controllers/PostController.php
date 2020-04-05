@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -37,7 +39,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -48,7 +50,22 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = new Post();
+        $post->title = $request->title;
+        $post->short_title = Str::length($request->title)>30 ? Str::substr($request->title, 0, 30) . '...' : $request->title;
+        $post->descr = $request->descr;
+        $post->author_id = rand(1,4);
+
+        if ($request->file('img')) {
+            $path = Storage::put('public', $request->file('img'));
+            $url = Storage::url($path);
+            $post->img = $url;
+        }
+
+        $post->save();
+
+        return redirect()->route('post.index');
+
     }
 
     /**

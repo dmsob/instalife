@@ -12,7 +12,11 @@
     @endif
     <aside class="aside_wrapper col-4">
         <div class="avatar"></div>
-        <div class="name">name</div>
+        @guest
+            <div class="name"> guest </div>
+            @else
+            <div class="name">{{ Auth::user()->name }} </div>
+        @endguest
     </aside>
    <div>
        <div class="row">
