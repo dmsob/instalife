@@ -21,7 +21,7 @@
    <div>
        <div class="row">
         @foreach($posts as $post)
-        <div class="col-12">
+        <div class="col-10">
             <div class="card">
                 <div class="card-header">
                     <div class="avatar"></div>
@@ -30,7 +30,10 @@
                 <div class="card-body">
                     <div class="card-img" style="background-image:url({{ $post->img ?? asset('img/default.jpg') }});"></div>
                     <div class="card-descr"><b>{{ $post->name }}</b>: {{ mb_strlen($post->descr)>190 ? mb_substr($post->descr, 0, 190) . '...' : $post->descr }}</div>
-                    <div class="post_date">{{$post->created_at->diffForHumans()}} </div>
+                    <a href="{{route('post.show',['id' => $post->id])}}" class="btn btn-outline-primary">Посмотреть</a>
+
+
+                    <div class="post_date">{{$post->created_at}} </div>
                 </div>
             </div>
         </div>
