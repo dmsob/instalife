@@ -23,8 +23,16 @@
                     <div class="card-descr"><b>{{ $post->name }}</b>: {{ $post->descr }}</div>
                     <div class="card-btn">
                         <a href="{{route('post.index')}}" class="btn btn-outline-primary">назад</a>
-                        <a href="{{route('post.edit',['id'=>$post->id])}}" class="btn btn-outline-success">изменить</a>
-                        <a href="{{route('post.destroy',['id'=>$post->id])}}" class="btn btn-outline-danger">удалить</a>
+                        @auth
+                            @if(Auth::user()->id == $post->author_id)
+                                <a href="{{route('post.edit',['id'=>$post->id])}}" class="btn btn-outline-success">изменить</a>
+                                <form action="{{route('post.destroy',['id'=>$post->id])}}" method="post" onsubmit="if ( confirm('Вы уверены?')) {return true} else {return false}">
+                                @csrf
+                                @method('DELETE')
+                                <input type="submit" class="btn btn-outline-danger" value="Удалить">
+                                </form>
+                            @endif
+                        @endauth
                     </div>
                     <div class="post_date">{{$post->created_at}} </div>
                 </div>

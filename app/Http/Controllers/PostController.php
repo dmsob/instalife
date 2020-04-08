@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+
+
+
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index','show');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -19,17 +27,17 @@ class PostController extends Controller
     {
         if ($request->search){
             $posts = Post::join('users','author_id', '=','users.id')
-                ->where('title', 'like', '%'.$request->search.'%')
-                ->orWhere('descr', 'like', '%'.$request->search.'%')
+                ->Where('descr', 'like', '%'.$request->search.'%')
                 ->orWhere('name', 'like', '%'.$request->search.'%')
                 ->orderBy('posts.created_at', 'desc')
                 ->get();
             return view('posts.index', compact('posts'));
         }
 
-        $posts = Post::join('users','author_id', '=','users.id')
-        ->orderBy('posts.created_at', 'desc')
-        ->paginate(4);
+        $posts = Post::join('users', 'posts.author_id', '=','users.id')
+            ->select('posts.*', 'users.name')
+            ->orderBy('posts.created_at', 'desc')
+            ->paginate(4);
 
         return view('posts.index', compact('posts'));
     }
@@ -50,11 +58,9 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         $post = new Post();
-        $post->title = $request->title;
-        $post->short_title = Str::length($request->title)>30 ? Str::substr($request->title, 0, 30) . '...' : $request->title;
         $post->descr = $request->descr;
         $post->author_id = Auth::user()->id;
 
@@ -78,8 +84,14 @@ class PostController extends Controller
      */
     public function show($id)
     {
+
         $post = Post::join('users','author_id', '=','users.id')
+            ->select('posts.*', 'users.name')
             ->find($id);
+
+        if (!$post) {
+            return redirect()->route('post.index')->withErrors('Пост не найден');
+        }
 
         return view('posts.show',compact('post'));
     }
@@ -92,7 +104,15 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $post = Post::all()->get($id);
+        $post = Post::find($id);
+
+        if (!$post) {
+            return redirect()->route('post.index')->withErrors('Пост не найден');
+        }
+
+        if ($post->author_id != Auth::user()->id) {
+            return redirect()->route('post.index')->withErrors('Не достаточно прав');
+        }
 
         return view('posts.edit',compact('post'));
     }
@@ -104,9 +124,30 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        //
+        $post = Post::find($id);
+
+        if (!$post) {
+            return redirect()->route('post.index')->withErrors('Пост не найден');
+        }
+
+        if ($post->author_id != Auth::user()->id) {
+            return redirect()->route('post.index')->withErrors('Не достаточно прав');
+        }
+
+        $post->descr = $request->descr;
+
+        if ($request->file('img')) {
+            $path = Storage::put('public', $request->file('img'));
+            $url = Storage::url($path);
+            $post->img = $url;
+        }
+
+        $post->update();
+
+        return redirect()->route('post.show', compact('id'))->with('success', 'Пост успешно изменен!');
+
     }
 
     /**
@@ -117,6 +158,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        if ($post->author_id != Auth::user()->id) {
+            return redirect()->route('post.index')->withErrors('Не достаточно прав');
+        }
+        $post->delete();
+        return redirect()->route('post.index')->with('success', 'Пост успешно удален!');
     }
 }

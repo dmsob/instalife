@@ -4,15 +4,7 @@
     <form action="{{ route('post.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         <h3>Создать пост</h3>
-        <div class="form-group">
-            <input name="title" type="text" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <textarea name="descr" rows="3" class="form-control" required></textarea>
-        </div>
-        <div class="form-group">
-            <input type="file" name="img">
-        </div>
+       @include('posts.parts.form')
         <input type="submit" value="Создать" class="btn btn-outline-success">
     </form>
 @endsection
