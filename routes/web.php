@@ -27,6 +27,10 @@ Route::patch('post/show/{id}', 'PostController@update')->name('post.update');
 Route::delete('post/{id}', 'PostController@destroy')->name('post.destroy');
 
 
+//Route::get('comment/create', 'CommentController')->name('post.create');
+//Route::resource('/comment', 'CommentController');
+Route::post('posts/{id}/comments', 'CommentController@store')->name('comment.store');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

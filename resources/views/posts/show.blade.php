@@ -35,6 +35,23 @@
                         @endauth
                     </div>
                     <div class="post_date">{{$post->created_at}} </div>
+
+                        <hr>
+                    <div class="comments">
+                        @foreach($post->comments as $comment)
+                            <article>
+                               <b>{{$comment->user->name}}</b>: {{$comment->descr}}
+                            </article>
+                        @endforeach
+                            @auth
+                                <form action="{{route('comment.store',['id'=>$post->id])}}" method="post">
+                                @csrf
+                                <textarea name="descr" rows="1" class="form-control" required placeholder="Комментировать..."></textarea>
+                                <button type="submit" class="btn btn-primary">Опубликовать</button>
+                                </form>
+                            @endauth
+                    </div>
+
                 </div>
             </div>
         </div>

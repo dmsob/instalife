@@ -87,4 +87,8 @@ header {
 }
 .card-btn{
     display: flex;
+    margin: 10px;
+}
+.comments{
+    margin: 10px;
 }
