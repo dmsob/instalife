@@ -20,6 +20,7 @@
     </aside>
    <div>
        <div class="row">
+           {{'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']}}
         @foreach($posts as $post)
         <div class="col-10">
             <div class="card">
